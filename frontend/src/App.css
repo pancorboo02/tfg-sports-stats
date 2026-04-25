@@ -1,0 +1,87 @@
+.container {
+  padding: 20px;
+  font-family: Arial;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.results-dropdown {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.result-item:hover {
+  background-color: #f0f0f0;
+}
+
+.type {
+  font-size: 12px;
+  color: gray;
+}
+
+.loading {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  background: #1e1e1e;
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card span {
+  font-size: 20px;
+}
+
+.stat-card h3 {
+  margin: 5px 0;
+  font-size: 22px;
+}
+
+.stat-card p {
+  font-size: 12px;
+  color: #ccc;
+}
+
+body {
+  background-color: #121212;
+  color: white;
+}
+
+select {
+  padding: 6px;
+  margin-top: 10px;
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #333;
+}
