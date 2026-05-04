@@ -1,0 +1,41 @@
+.standings-container {
+  margin-top: 30px;
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1e1e1e;
+  color: white;
+}
+
+.standings-table th,
+.standings-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.standings-table th {
+  background: #2a2a2a;
+}
+
+.standings-table tr:hover {
+  background: #333;
+}
+
+/* 🟢 Champions */
+.champions {
+  background-color: rgba(46, 125, 50, 0.25);
+}
+
+/* 🔴 Descenso */
+.relegation {
+  background-color: rgba(183, 28, 28, 0.25);
+}
+
+/* ⭐ Equipo actual */
+.highlight {
+  outline: 2px solid #fff;
+  font-weight: bold;
+}

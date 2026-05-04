@@ -17,8 +17,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from sqlalchemy import text
-
 @app.get("/player/{name}")
 def get_player(name: str):
     query = text("""
@@ -85,4 +83,32 @@ def search(q: str):
     """)
 
     df = pd.read_sql(query, engine, params={"q": f"%{q}%"})
+    return df.to_dict(orient="records")
+
+@app.get("/team/{team_name}")
+def get_team(team_name: str):
+    query = f"""
+    SELECT *
+    FROM team_stats
+    WHERE team_name = '{team_name}'
+    ORDER BY season DESC
+    """
+    df = pd.read_sql(query, engine)
+    return df.to_dict(orient="records")
+
+@app.get("/standings")
+def get_standings(competition: str, season: int):
+    query = f"""
+    SELECT *
+    FROM standings
+    WHERE competition = '{competition}'
+    AND season = {season}
+    ORDER BY points DESC
+    """
+    
+    df = pd.read_sql(query, engine)
+
+    if df.empty:
+        return []
+
     return df.to_dict(orient="records")
