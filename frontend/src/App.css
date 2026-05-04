@@ -15,11 +15,12 @@
   width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  background: white;
-  border: 1px solid #ccc;
+  background: #1e1e1e;
+  border: 1px solid #333;
   list-style: none;
   padding: 0;
   margin: 0;
+  z-index: 1000;
 }
 
 .result-item {
@@ -27,15 +28,20 @@
   justify-content: space-between;
   padding: 8px;
   cursor: pointer;
+  color: white;
 }
 
 .result-item:hover {
-  background-color: #f0f0f0;
+  background-color: #333;
+}
+
+.result-item.active {
+  background-color: #444;
 }
 
 .type {
   font-size: 12px;
-  color: gray;
+  color: #aaa;
 }
 
 .loading {
@@ -84,4 +90,22 @@ select {
   background: #1e1e1e;
   color: white;
   border: 1px solid #333;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1e1e1e;
+  padding: 10px 20px;
+  border-bottom: 1px solid #333;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 300px;
 }

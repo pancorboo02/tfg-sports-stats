@@ -9,12 +9,14 @@ import {
 } from 'recharts';
 
 import { statsMap } from '../utils/statsMap';
+import { formatSeason } from '../utils/formatSeason';
+import { LabelList } from 'recharts';
 
 function StatsChart({ data, stat }) {
   const formattedData = [...data]
     .sort((a, b) => a.season - b.season)
     .map((d) => ({
-      season: d.season,
+      season: formatSeason(d.season),
       value: d[stat] || 0,
     }));
 
@@ -40,6 +42,40 @@ function StatsChart({ data, stat }) {
     return null;
   };
 
+  const renderCustomLabel = (props) => {
+    const { x, y, width, height, value } = props;
+
+    // Si la barra es muy pequeña, lo dejamos arriba (afuera)
+    if (height < 30) {
+      return (
+        <text
+          x={x + width / 2}
+          y={y - 8}
+          textAnchor="middle"
+          fill="#ccc"
+          fontSize={14}
+        >
+          {value}
+        </text>
+      );
+    }
+
+    // Barra grande -> Texto dentro
+    return (
+      <text
+        x={x + width / 2}
+        // Cambia el 15 por 25 o 30 para bajarlo más
+        y={y + 25}
+        textAnchor="middle"
+        fill="white"
+        fontWeight="bold"
+        fontSize={20} // Un tamaño de 20-24 suele quedar bien
+      >
+        {value}
+      </text>
+    );
+  };
+
   return (
     <div style={{ width: '100%', height: 320, marginTop: '30px' }}>
       <h3>{statsMap[stat]?.label} por temporada</h3>
@@ -59,7 +95,9 @@ function StatsChart({ data, stat }) {
             dataKey="value"
             fill={statsMap[stat]?.color || '#8884d8'}
             radius={[6, 6, 0, 0]}
-          />
+          >
+            <LabelList dataKey="value" content={renderCustomLabel} />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>
