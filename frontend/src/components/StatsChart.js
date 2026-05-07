@@ -11,6 +11,7 @@ import {
 import { statsMap } from '../utils/statsMap';
 import { formatSeason } from '../utils/formatSeason';
 import { LabelList } from 'recharts';
+import { teamStatsMap } from '../utils/teamStatsMap';
 
 function StatsChart({ data, stat }) {
   const formattedData = [...data]
@@ -78,7 +79,7 @@ function StatsChart({ data, stat }) {
 
   return (
     <div style={{ width: '100%', height: 320, marginTop: '30px' }}>
-      <h3>{statsMap[stat]?.label} por temporada</h3>
+      <h3>{teamStatsMap[stat]} por temporada</h3>
 
       <ResponsiveContainer>
         <BarChart data={formattedData}>

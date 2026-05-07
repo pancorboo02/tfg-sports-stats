@@ -109,3 +109,128 @@ select {
   position: relative;
   width: 300px;
 }
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 30px;
+
+  background: #181818;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.logo {
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  min-width: 120px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 650px;
+}
+
+.modern-search {
+  display: flex;
+  align-items: center;
+  background: #242424;
+  border: 1px solid #333;
+  border-radius: 16px;
+  overflow: visible;
+  transition: 0.2s;
+}
+
+.modern-search:focus-within {
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.modern-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 18px;
+  font-size: 15px;
+}
+
+.modern-search-input::placeholder {
+  color: #888;
+}
+
+.competition-filter {
+  width: 170px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #3a3a3a;
+  border-radius: 12px;
+  outline: none;
+  background: #2f2f2f;
+  color: white;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.competition-filter:hover {
+  background: #383838;
+}
+
+.competition-filter:focus {
+  border-color: #555;
+}
+
+.competition-filter:hover {
+  background: #383838;
+}
+
+.competition-filter:focus {
+  border-color: #555;
+}
+
+.results-dropdown {
+  position: absolute;
+  top: 58px;
+  width: 100%;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 14px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: white;
+  transition: 0.15s;
+}
+
+.result-item:hover,
+.result-item.active {
+  background: #2a2a2a;
+}
+
+.type {
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.competition-tag {
+  margin-left: 10px;
+  background: #333;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #bbb;
+}

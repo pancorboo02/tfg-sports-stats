@@ -4,47 +4,72 @@ from sqlalchemy import create_engine
 
 engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
 
+# 🔥 5 grandes ligas
+leagues = [
+    'ENG-Premier League',
+    'ESP-La Liga',
+    'ITA-Serie A',
+    'GER-Bundesliga',
+    'FRA-Ligue 1'
+]
+
+seasons = [20, 21, 22, 23, 24, 25]
+
 fbref = sd.FBref(
-    leagues=['ENG-Premier League'],
-    seasons=[20,21,22,23,24,25]
+    leagues=leagues,
+    seasons=seasons
 )
+
+print("Leyendo player stats...")
 
 df = fbref.read_player_season_stats(stat_type="standard")
 
-# Reset index
 df = df.reset_index()
 
-print(df["season"].unique())
+print("Datos cargados:", len(df))
 
-# Aplanar columnas
-df.columns = ['_'.join(col).strip() if isinstance(col, tuple) else col for col in df.columns]
+# 🔥 aplanar columnas
+df.columns = [
+    '_'.join(col).strip() if isinstance(col, tuple) else col
+    for col in df.columns
+]
 df.columns = [col.rstrip('_') for col in df.columns]
 
-# Limpiar nacionalidad
+# 🔥 normalizar competición
+df["competition"] = df["league"]
+
+df["competition"] = df["competition"].str.replace("ENG-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ESP-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ITA-", "", regex=False)
+df["competition"] = df["competition"].str.replace("GER-", "", regex=False)
+df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
+
+# 🔥 limpiar nacionalidad
 df["nation"] = df["nation"].str.split().str[0]
 
-# def format_season(season):
-#     season = int(season)  # aseguramos entero
-#     start = season - 1
-#     end = str(season)[-2:]
-#     return f"{start}-{end}"
+# 🔥 tipos
+df["season"] = df["season"].astype(int)
 
-# df["season_label"] = df["season"].apply(format_season)
-
-# Renombrar columnas clave
+# 🔥 renombrar columnas clave
 df = df.rename(columns={
     "player": "name",
     "nation": "nationality",
+    "team": "team_name",
     "Performance_Gls": "goals",
     "Performance_Ast": "assists"
 })
 
-# Crear id único
+# 🔥 eliminar columnas innecesarias si quieres optimizar
+# df = df[["name", "team_name", "competition", "season", "goals", "assists", ...]]
+
+# 🔥 id
 df["id"] = range(1, len(df) + 1)
 
+# 🔥 limpiar NaN
+df = df.fillna(0)
 
-# Guardar TODO
+# guardar
 df.to_sql("player_stats", engine, if_exists="replace", index=False)
 
-print("Datos cargados correctamente")
+print("Player stats cargados correctamente")
 print(len(df))

@@ -4,9 +4,19 @@ from sqlalchemy import create_engine
 
 engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
 
+leagues = [
+    'ENG-Premier League',
+    'ESP-La Liga',
+    'ITA-Serie A',
+    'GER-Bundesliga',
+    'FRA-Ligue 1'
+]
+
+seasons = [20, 21, 22, 23, 24, 25]
+
 fbref = sd.FBref(
-    leagues=['ENG-Premier League'],
-    seasons=[20]
+    leagues=leagues,
+    seasons=seasons
 )
 
 print("Leyendo schedule...")
@@ -16,13 +26,18 @@ df = df.reset_index()
 
 print("Datos cargados:", len(df))
 
-# limpiar
-df = df.rename(columns={
-    "league": "competition"
-})
+# 🔥 normalizar competición
+df["competition"] = df["league"]
 
-# 🔥 arreglar encoding raro
+df["competition"] = df["competition"].str.replace("ENG-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ESP-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ITA-", "", regex=False)
+df["competition"] = df["competition"].str.replace("GER-", "", regex=False)
+df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
+
+# 🔥 arreglar encoding
 df["score"] = df["score"].str.replace("â€“", "–")
+
 df["season"] = df["season"].astype(int)
 
 # 🔥 separar goles
@@ -31,7 +46,6 @@ df[["GF_home", "GA_home"]] = df["score"].str.split("–", expand=True)
 df["GF_home"] = pd.to_numeric(df["GF_home"], errors="coerce")
 df["GA_home"] = pd.to_numeric(df["GA_home"], errors="coerce")
 
-# eliminar partidos no jugados
 df = df[df["GF_home"].notna()]
 
 # 🔥 home
@@ -48,44 +62,42 @@ away["GA"] = away["GF_home"]
 
 df_teams = pd.concat([home, away])
 
-# resultado (vectorizado)
+# 🔥 resultado vectorizado
 df_teams["result"] = "D"
 df_teams.loc[df_teams["GF"] > df_teams["GA"], "result"] = "W"
 df_teams.loc[df_teams["GF"] < df_teams["GA"], "result"] = "L"
 
-# agrupar
+# 🔥 agrupar
 standings = []
 
-for (team, season, competition), group in df_teams.groupby(["team_name", "season", "competition"]):
-    
-    matches = len(group)
+for (team, season, competition), group in df_teams.groupby(
+    ["team_name", "season", "competition"]
+):
+
     wins = (group["result"] == "W").sum()
     draws = (group["result"] == "D").sum()
     losses = (group["result"] == "L").sum()
-    
+
     goals_for = group["GF"].sum()
     goals_against = group["GA"].sum()
-    
-    goal_diff = goals_for - goals_against
-    points = wins * 3 + draws
 
     standings.append({
         "team_name": team,
         "season": season,
         "competition": competition,
-        "matches": matches,
+        "matches": len(group),
         "wins": wins,
         "draws": draws,
         "losses": losses,
         "goals_for": goals_for,
         "goals_against": goals_against,
-        "goal_diff": goal_diff,
-        "points": points
+        "goal_diff": goals_for - goals_against,
+        "points": wins * 3 + draws
     })
 
 standings_df = pd.DataFrame(standings)
 
-# ordenar
+# 🔥 ordenar
 standings_df = standings_df.sort_values(
     ["competition", "season", "points"],
     ascending=[True, True, False]
@@ -96,5 +108,5 @@ standings_df["id"] = range(1, len(standings_df) + 1)
 # guardar
 standings_df.to_sql("standings", engine, if_exists="replace", index=False)
 
-print("Standings generados correctamente")
+print("Standings cargados correctamente")
 print(len(standings_df))

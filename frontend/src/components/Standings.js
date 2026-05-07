@@ -45,7 +45,7 @@ function Standings({ competition, season, teamName }) {
             <th>Equipo</th>
             <th>Pts</th>
             <th>GF</th>
-            <th>GA</th>
+            <th>GC</th>
             <th>DG</th>
           </tr>
         </thead>
