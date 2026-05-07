@@ -5,7 +5,13 @@ from sqlalchemy import create_engine
 engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
 
 fbref = sd.FBref(
-    leagues=['ENG-Premier League'],
+    leagues=[
+        'ENG-Premier League',
+        'ESP-La Liga',
+        'ITA-Serie A',
+        'GER-Bundesliga',
+        'FRA-Ligue 1'
+    ],
     seasons=[20,21,22,23,24,25]
 )
 
@@ -25,6 +31,13 @@ df = df.rename(columns={
     "Standard_Sh": "shots",
     "Standard_SoT": "shots_on_target"
 })
+
+
+df["competition"] = df["competition"].str.replace("ENG-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ESP-", "", regex=False)
+df["competition"] = df["competition"].str.replace("ITA-", "", regex=False)
+df["competition"] = df["competition"].str.replace("GER-", "", regex=False)
+df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
 
 # id
 df["id"] = range(1, len(df) + 1)

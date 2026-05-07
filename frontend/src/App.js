@@ -10,7 +10,7 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<div style={{ padding: 20 }}>Inicio</div>} />
+        <Route path="/" element={<div className="home-page"></div>} />
         <Route path="/player/:name" element={<Player />} />
         <Route path="/team/:name" element={<Team />} />
       </Routes>

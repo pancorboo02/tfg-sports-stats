@@ -24,15 +24,15 @@
   background: #333;
 }
 
-/* 🟢 Champions */
+/* 🟢 Champions 
 .champions {
   background-color: rgba(46, 125, 50, 0.25);
-}
+} */
 
-/* 🔴 Descenso */
+/* 🔴 Descenso
 .relegation {
   background-color: rgba(183, 28, 28, 0.25);
-}
+} */
 
 /* ⭐ Equipo actual */
 .highlight {

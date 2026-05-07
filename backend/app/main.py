@@ -57,44 +57,51 @@ def get_table(table_name: str, limit: int = 100, offset: int = 0):
     df = pd.read_sql(query, engine)
     return df.to_dict(orient="records")
 
+from sqlalchemy import text
+
 @app.get("/search")
-def search(q: str):
+def search(q: str, competition: str = None):
     if len(q) < 2:
         return []
 
     query = text("""
     (
-        SELECT DISTINCT name, 'player' as type
-        FROM player_stats
+        SELECT DISTINCT name, 'team' AS type, competition
+        FROM teams
         WHERE name ILIKE :q
-        LIMIT 5
+        AND (:competition IS NULL OR competition = :competition)
     )
 
     UNION
 
     (
-        SELECT DISTINCT team as name, 'team' as type
+        SELECT DISTINCT name, 'player' AS type, competition
         FROM player_stats
-        WHERE team ILIKE :q
-        LIMIT 5
+        WHERE name ILIKE :q
+        AND (:competition IS NULL OR competition = :competition)
     )
 
-    LIMIT 8
+    LIMIT 10
     """)
 
-    df = pd.read_sql(query, engine, params={"q": f"%{q}%"})
-    return df.to_dict(orient="records")
+    df = pd.read_sql(query, engine, params={
+        "q": f"%{q}%",
+        "competition": competition if competition != "" else None
+    })
 
-@app.get("/team/{team_name}")
-def get_team(team_name: str):
-    query = f"""
+    return df.fillna("").to_dict(orient="records")
+
+@app.get("/team/{name}")
+def get_team(name: str):
+    query = """
     SELECT *
     FROM team_stats
-    WHERE team_name = '{team_name}'
+    WHERE team_name = %s
     ORDER BY season DESC
     """
-    df = pd.read_sql(query, engine)
-    return df.to_dict(orient="records")
+    
+    df = pd.read_sql(query, engine, params=(name,))
+    return df.fillna("").to_dict(orient="records")
 
 @app.get("/standings")
 def get_standings(competition: str, season: int):
