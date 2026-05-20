@@ -5,6 +5,8 @@ import StatsChart from './components/StatsChart';
 import { statsMap } from './utils/statsMap';
 import { formatSeason } from './utils/formatSeason';
 import { formatPosition } from './utils/positionsMap';
+import playerPlaceholder from './assets/player-placeholder.png';
+import './App.css';
 
 function Player() {
   const { name } = useParams();
@@ -15,6 +17,7 @@ function Player() {
   const [selectedStat, setSelectedStat] = useState('goals');
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetch(`http://127.0.0.1:8000/player/${name}`)
       .then((res) => res.json())
       .then((data) => {
@@ -30,6 +33,7 @@ function Player() {
   const seasons = [...new Set(data.map((d) => d.season))];
 
   const current = data.find((d) => Number(d.season) === Number(season));
+  const teamData = current.team_data ? current.team_data.split('||') : [];
 
   if (!current) return <div>Cargando temporada...</div>;
 
@@ -39,11 +43,42 @@ function Player() {
       <button onClick={() => navigate(-1)}>⬅️ Volver</button>
 
       {/* HEADER */}
-      <h1>{name}</h1>
-      <p>
-        {countryMap[current.nationality] || current.nationality} ·{' '}
-        {formatPosition(current.pos)}
-      </p>
+      <div className="player-header">
+        <img src={playerPlaceholder} alt={name} className="player-avatar" />
+
+        <div>
+          <h1>{name}</h1>
+          <p>
+            {current.age} años
+            {' · '}
+            {countryMap[current.nationality] || current.nationality}
+            {' · '}
+            {formatPosition(current.pos)}
+            {' · '}
+            Nacido en {current.born ?? 'N/D'}
+          </p>
+        </div>
+      </div>
+
+      <div className="player-teams">
+        {teamData.map((item, index) => {
+          const [team, logo] = item.split('@@');
+
+          return (
+            <div
+              key={index}
+              className="player-team"
+              onClick={() => navigate(`/team/${encodeURIComponent(team)}`)}
+            >
+              {logo && (
+                <img src={logo} alt={team} className="player-team-logo" />
+              )}
+
+              <span>{team}</span>
+            </div>
+          );
+        })}
+      </div>
 
       {/* SELECTOR TEMPORADA */}
       <select value={season} onChange={(e) => setSeason(e.target.value)}>
@@ -59,9 +94,9 @@ function Player() {
         value={selectedStat}
         onChange={(e) => setSelectedStat(e.target.value)}
       >
-        {Object.entries(statsMap).map(([key, obj]) => (
+        {Object.entries(statsMap).map(([key, label]) => (
           <option key={key} value={key}>
-            {obj.label}
+            {label}
           </option>
         ))}
       </select>
@@ -83,7 +118,7 @@ function Player() {
         <div className="stat-card">
           <span>📅</span>
           <h3>{current['Playing Time_MP']}</h3>
-          <p>Partidos</p>
+          <p>Partidos jugados</p>
         </div>
 
         <div className="stat-card">
@@ -91,13 +126,18 @@ function Player() {
           <h3>{current['Playing Time_Min']}</h3>
           <p>Minutos</p>
         </div>
-      </div>
 
-      {/* STATS SECUNDARIAS */}
-      <div style={{ marginTop: '20px' }}>
-        <p>🟨 Amarillas: {current['Performance_CrdY']}</p>
-        <p>🟥 Rojas: {current['Performance_CrdR']}</p>
-        <p>⚽+🎯 G+A: {current['Performance_G+A']}</p>
+        <div className="stat-card">
+          <span>🟨</span>
+          <h3>{current['Performance_CrdY']}</h3>
+          <p>Amarillas</p>
+        </div>
+
+        <div className="stat-card">
+          <span>🟥</span>
+          <h3>{current['Performance_CrdR']}</h3>
+          <p>Rojas</p>
+        </div>
       </div>
 
       {/* GRÁFICO */}

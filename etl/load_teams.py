@@ -41,7 +41,7 @@ df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
 
 # id
 df["id"] = range(1, len(df) + 1)
-
+df["season"] = df["season"].astype(int)
 df.to_sql("team_stats", engine, if_exists="replace", index=False)
 
 print("Teams cargados")

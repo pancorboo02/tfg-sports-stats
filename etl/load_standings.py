@@ -96,7 +96,9 @@ for (team, season, competition), group in df_teams.groupby(
     })
 
 standings_df = pd.DataFrame(standings)
-
+standings_df = standings_df[
+    standings_df["matches"] >= 10  #así evito que se metan equipos de divisiones inferiores que hayan jugado playoff
+]
 # 🔥 ordenar
 standings_df = standings_df.sort_values(
     ["competition", "season", "points"],

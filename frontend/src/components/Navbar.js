@@ -96,10 +96,19 @@ function Navbar() {
                 onClick={() => handleNavigation(r)}
               >
                 <span>
-                  {r.type === 'player' ? '👤' : '🏟️'} {r.name}
-                  {r.competition && (
-                    <span className="competition-tag">{r.competition}</span>
-                  )}
+                  <div className="search-result-left">
+                    {r.type === 'team' && r.logo_url ? (
+                      <img
+                        src={r.logo_url}
+                        alt={r.name}
+                        className="search-team-logo"
+                      />
+                    ) : (
+                      <span className="search-player-icon">👤</span>
+                    )}
+
+                    <span>{r.name}</span>
+                  </div>
                 </span>
 
                 <span className="type">{r.type}</span>
