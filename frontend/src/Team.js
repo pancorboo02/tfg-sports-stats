@@ -18,6 +18,7 @@ function Team() {
 
   // 🔥 cargar datos del equipo
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetch(`http://127.0.0.1:8000/team/${name}`)
       .then((res) => res.json())
       .then((data) => {
@@ -69,11 +70,15 @@ function Team() {
 
   return (
     <div style={{ padding: 20 }}>
-      {/* 🔙 VOLVER */}
-      <button onClick={() => navigate(-1)}>⬅️ Volver</button>
-
       {/* HEADER */}
-      <h1>{name}</h1>
+      {/* <h1>{name}</h1> */}
+      <div className="team-header">
+        {current.logo_url && (
+          <img src={current.logo_url} alt={name} className="team-logo" />
+        )}
+
+        <h1>{name}</h1>
+      </div>
 
       {/* 🔥 FILTRO COMPETICIÓN */}
       <select
@@ -102,30 +107,40 @@ function Team() {
       {/* 🔥 STATS PRINCIPALES */}
       <div className="stats-grid">
         <div className="stat-card">
-          ⚽<h3>{current.goals}</h3>
-          <p>Goles</p>
+          <span>🏆</span>
+          <h3>{teamStanding?.points || 0}</h3>
+          <p>Puntos</p>
         </div>
 
-        {teamStanding && (
-          <>
-            <div className="stat-card">
-              🟢
-              <h3>{teamStanding.wins}</h3>
-              <p>Victorias</p>
-            </div>
+        <div className="stat-card">
+          <span>✅</span>
+          <h3>{teamStanding?.wins || 0}</h3>
+          <p>Victorias</p>
+        </div>
 
-            <div className="stat-card">
-              ⚪<h3>{teamStanding.draws}</h3>
-              <p>Empates</p>
-            </div>
+        <div className="stat-card">
+          <span>⚽</span>
+          <h3>{teamStanding?.goals_for || 0}</h3>
+          <p>Goles a favor</p>
+        </div>
 
-            <div className="stat-card">
-              🔴
-              <h3>{teamStanding.losses}</h3>
-              <p>Derrotas</p>
-            </div>
-          </>
-        )}
+        <div className="stat-card">
+          <span>🥅</span>
+          <h3>{teamStanding?.goals_against || 0}</h3>
+          <p>Goles en contra</p>
+        </div>
+
+        <div className="stat-card">
+          <span>📈</span>
+          <h3>{teamStanding?.goal_diff || 0}</h3>
+          <p>Diferencia de goles</p>
+        </div>
+
+        <div className="stat-card">
+          <span>🎯</span>
+          <h3>{current?.['Standard_Sh/90'] || 0}</h3>
+          <p>Tiros /90</p>
+        </div>
       </div>
 
       {/* 🔥 SELECTOR STAT */}

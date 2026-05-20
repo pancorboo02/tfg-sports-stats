@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import './Standings.css';
+import leagueLogos from '../utils/leagueLogos';
+import { useNavigate } from 'react-router-dom';
 
 function Standings({ competition, season, teamName }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!competition || !season) return;
@@ -36,17 +39,29 @@ function Standings({ competition, season, teamName }) {
 
   return (
     <div className="standings-container">
-      <h3>Clasificación</h3>
+      <div className="league-header">
+        <img
+          src={leagueLogos[competition]}
+          alt={competition}
+          className="league-logo"
+        />
+
+        <h2>{competition}</h2>
+      </div>
 
       <table className="standings-table">
         <thead>
           <tr>
             <th>#</th>
             <th>Equipo</th>
-            <th>Pts</th>
+            <th>PJ</th>
+            <th>PG</th>
+            <th>PE</th>
+            <th>PP</th>
             <th>GF</th>
             <th>GC</th>
             <th>DG</th>
+            <th>Pts</th>
           </tr>
         </thead>
 
@@ -64,11 +79,32 @@ function Standings({ competition, season, teamName }) {
             return (
               <tr key={i} className={rowClass}>
                 <td>{i + 1}</td>
-                <td>{team.team_name}</td>
-                <td>{team.points}</td>
+                <td>
+                  <div
+                    className="standings-team"
+                    onClick={() =>
+                      navigate(`/team/${encodeURIComponent(team.team_name)}`)
+                    }
+                  >
+                    {team.logo_url && (
+                      <img
+                        src={team.logo_url}
+                        alt={team.team_name}
+                        className="standings-logo"
+                      />
+                    )}
+
+                    <span>{team.team_name}</span>
+                  </div>
+                </td>
+                <td>{team.matches}</td>
+                <td>{team.wins}</td>
+                <td>{team.draws}</td>
+                <td>{team.losses}</td>
                 <td>{team.goals_for}</td>
                 <td>{team.goals_against}</td>
                 <td>{team.goal_diff}</td>
+                <td>{team.points}</td>
               </tr>
             );
           })}
