@@ -2,24 +2,25 @@ export const statsMap = {
   goals: 'Goles',
   assists: 'Asistencias',
 
-  'Performance_G+A': 'Goles + asistencias',
+  goal_contributions: 'G+A',
 
-  'Playing Time_MP': 'Partidos jugados',
-  'Playing Time_Starts': 'Titularidades',
-  'Playing Time_Min': 'Minutos jugados',
-  'Playing Time_90s': '90 minutos jugados',
+  matches_played: 'Partidos jugados',
+  starts: 'Titularidades',
+  minutes: 'Minutos jugados',
+  matches_90s: '90 minutos jugados',
 
-  'Performance_G-PK': 'Goles sin penalti',
+  non_penalty_goals: 'Goles sin penalti',
+  non_penalty_goal_contributions: 'G+A sin penaltis',
 
-  Performance_PK: 'Penaltis marcados',
-  Performance_PKatt: 'Penaltis intentados',
+  penalties_scored: 'Penaltis marcados',
+  penalties_attempted: 'Penaltis intentados',
 
-  Performance_CrdY: 'Tarjetas amarillas',
-  Performance_CrdR: 'Tarjetas rojas',
+  yellow_cards: 'Tarjetas amarillas',
+  red_cards: 'Tarjetas rojas',
 
-  'Per 90 Minutes_Gls': 'Goles por 90 min',
-  'Per 90 Minutes_Ast': 'Asistencias por 90 min',
-  'Per 90 Minutes_G+A': 'G+A por 90 min',
-  'Per 90 Minutes_G-PK': 'Goles sin penalti por 90 min',
-  'Per 90 Minutes_G+A-PK': 'G+A sin penaltis por 90 min',
+  per90_goals: 'Goles por 90 min',
+  per90_assists: 'Asistencias por 90 min',
+  per90_goal_contributions: 'G+A por 90 min',
+  per90_non_penalty_goals: 'Goles sin penalti por 90 min',
+  per90_non_penalty_goal_contributions: 'G+A sin penaltis por 90 min',
 };

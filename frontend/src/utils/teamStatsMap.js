@@ -3,13 +3,13 @@ export const teamStatsMap = {
   shots: 'Tiros',
   shots_on_target: 'Tiros a puerta',
 
-  Standard_PK: 'Penaltis marcados',
-  Standard_PKatt: 'Penaltis intentados',
+  penalties_scored: 'Penaltis marcados',
+  penalties_attempted: 'Penaltis intentados',
 
-  'Standard_SoT%': 'Precisión de tiro (%)',
-  'Standard_G/Sh': 'Eficiencia de tiro',
-  'Standard_G/SoT': 'Eficiencia a puerta',
+  shot_accuracy: 'Precisión de tiro (%)',
+  goals_per_shot: 'Eficiencia de tiro',
+  goals_per_shot_on_target: 'Eficiencia a puerta',
 
-  'Standard_Sh/90': 'Tiros por partido',
-  'Standard_SoT/90': 'Tiros a puerta por partido',
+  shots_per90: 'Tiros por partido',
+  shots_on_target_per90: 'Tiros a puerta por partido',
 };

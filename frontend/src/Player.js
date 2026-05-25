@@ -6,6 +6,7 @@ import { statsMap } from './utils/statsMap';
 import { formatSeason } from './utils/formatSeason';
 import { formatPosition } from './utils/positionsMap';
 import playerPlaceholder from './assets/player-placeholder.png';
+import { formatAge } from './utils/formatAge';
 import './App.css';
 
 function Player() {
@@ -39,9 +40,6 @@ function Player() {
 
   return (
     <div style={{ padding: '20px' }}>
-      {/* 🔙 VOLVER */}
-      <button onClick={() => navigate(-1)}>⬅️ Volver</button>
-
       {/* HEADER */}
       <div className="player-header">
         <img src={playerPlaceholder} alt={name} className="player-avatar" />
@@ -49,7 +47,7 @@ function Player() {
         <div>
           <h1>{name}</h1>
           <p>
-            {current.age} años
+            {formatAge(current.age)}
             {' · '}
             {countryMap[current.nationality] || current.nationality}
             {' · '}
@@ -117,25 +115,25 @@ function Player() {
 
         <div className="stat-card">
           <span>📅</span>
-          <h3>{current['Playing Time_MP']}</h3>
+          <h3>{current.matches_played}</h3>
           <p>Partidos jugados</p>
         </div>
 
         <div className="stat-card">
           <span>⏱️</span>
-          <h3>{current['Playing Time_Min']}</h3>
+          <h3>{current.minutes}</h3>
           <p>Minutos</p>
         </div>
 
         <div className="stat-card">
           <span>🟨</span>
-          <h3>{current['Performance_CrdY']}</h3>
+          <h3>{current.yellow_cards}</h3>
           <p>Amarillas</p>
         </div>
 
         <div className="stat-card">
           <span>🟥</span>
-          <h3>{current['Performance_CrdR']}</h3>
+          <h3>{current.red_cards}</h3>
           <p>Rojas</p>
         </div>
       </div>

@@ -27,9 +27,20 @@ df.columns = [col.rstrip('_') for col in df.columns]
 df = df.rename(columns={
     "league": "competition",
     "team": "team_name",
+
     "Standard_Gls": "goals",
     "Standard_Sh": "shots",
-    "Standard_SoT": "shots_on_target"
+    "Standard_SoT": "shots_on_target",
+
+    "Standard_SoT%": "shot_accuracy",
+    "Standard_Sh/90": "shots_per90",
+    "Standard_SoT/90": "shots_on_target_per90",
+
+    "Standard_G/Sh": "goals_per_shot",
+    "Standard_G/SoT": "goals_per_shot_on_target",
+
+    "Standard_PK": "penalties_scored",
+    "Standard_PKatt": "penalties_attempted"
 })
 
 
