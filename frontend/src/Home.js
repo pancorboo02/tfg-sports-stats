@@ -34,7 +34,7 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Pregunta a SmartStats AI</h1>
+      <h1 className="home-title">Pregunta al agente SebastIAn</h1>
 
       <p className="home-subtitle">
         Consulta estadísticas de fútbol usando lenguaje natural

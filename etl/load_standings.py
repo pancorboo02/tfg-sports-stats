@@ -26,7 +26,7 @@ df = df.reset_index()
 
 print("Datos cargados:", len(df))
 
-# 🔥 normalizar competición
+# normalizar competición
 df["competition"] = df["league"]
 
 df["competition"] = df["competition"].str.replace("ENG-", "", regex=False)
@@ -35,12 +35,12 @@ df["competition"] = df["competition"].str.replace("ITA-", "", regex=False)
 df["competition"] = df["competition"].str.replace("GER-", "", regex=False)
 df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
 
-# 🔥 arreglar encoding
+# arreglar encoding
 df["score"] = df["score"].str.replace("â€“", "–")
 
 df["season"] = df["season"].astype(int)
 
-# 🔥 separar goles
+# separar goles
 df[["GF_home", "GA_home"]] = df["score"].str.split("–", expand=True)
 
 df["GF_home"] = pd.to_numeric(df["GF_home"], errors="coerce")
@@ -48,13 +48,13 @@ df["GA_home"] = pd.to_numeric(df["GA_home"], errors="coerce")
 
 df = df[df["GF_home"].notna()]
 
-# 🔥 home
+# home
 home = df.copy()
 home["team_name"] = home["home_team"]
 home["GF"] = home["GF_home"]
 home["GA"] = home["GA_home"]
 
-# 🔥 away
+# away
 away = df.copy()
 away["team_name"] = away["away_team"]
 away["GF"] = away["GA_home"]
@@ -62,12 +62,12 @@ away["GA"] = away["GF_home"]
 
 df_teams = pd.concat([home, away])
 
-# 🔥 resultado vectorizado
+# resultado vectorizado
 df_teams["result"] = "D"
 df_teams.loc[df_teams["GF"] > df_teams["GA"], "result"] = "W"
 df_teams.loc[df_teams["GF"] < df_teams["GA"], "result"] = "L"
 
-# 🔥 agrupar
+# agrupar
 standings = []
 
 for (team, season, competition), group in df_teams.groupby(
@@ -99,7 +99,7 @@ standings_df = pd.DataFrame(standings)
 standings_df = standings_df[
     standings_df["matches"] >= 10  #así evito que se metan equipos de divisiones inferiores que hayan jugado playoff
 ]
-# 🔥 ordenar
+# ordenar
 standings_df = standings_df.sort_values(
     ["competition", "season", "points"],
     ascending=[True, True, False]

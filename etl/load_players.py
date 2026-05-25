@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 
 engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
 
-# 🔥 5 grandes ligas
 leagues = [
     'ENG-Premier League',
     'ESP-La Liga',
@@ -28,14 +27,14 @@ df = df.reset_index()
 
 print("Datos cargados:", len(df))
 
-# 🔥 aplanar columnas
+# aplanar columnas
 df.columns = [
     '_'.join(col).strip() if isinstance(col, tuple) else col
     for col in df.columns
 ]
 df.columns = [col.rstrip('_') for col in df.columns]
 
-# 🔥 normalizar competición
+# normalizar competición
 df["competition"] = df["league"]
 
 df["competition"] = df["competition"].str.replace("ENG-", "", regex=False)
@@ -44,13 +43,13 @@ df["competition"] = df["competition"].str.replace("ITA-", "", regex=False)
 df["competition"] = df["competition"].str.replace("GER-", "", regex=False)
 df["competition"] = df["competition"].str.replace("FRA-", "", regex=False)
 
-# 🔥 limpiar nacionalidad
+# limpiar nacionalidad
 df["nation"] = df["nation"].str.split().str[0]
 
-# 🔥 tipos
+# tipos
 df["season"] = df["season"].astype(int)
 
-# 🔥 renombrar columnas clave
+# renombrar columnas clave
 df = df.rename(columns={
     "player": "name",
     "nation": "nationality",
@@ -83,13 +82,10 @@ df["non_penalty_goal_contributions"] = (
     df["non_penalty_goals"] + df["assists"]
 )
 
-# 🔥 eliminar columnas innecesarias si quieres optimizar
-# df = df[["name", "team_name", "competition", "season", "goals", "assists", ...]]
-
-# 🔥 id
+# id
 df["id"] = range(1, len(df) + 1)
 
-# 🔥 limpiar NaN
+# limpiar NaN
 df = df.fillna(0)
 
 # guardar

@@ -92,6 +92,51 @@ standings:
 - goal_diff
 - points
 
+REGLAS DE UTILIDAD DE RESULTADOS:
+
+Devuelve resultados útiles y completos para el usuario.
+
+Cuando el usuario pregunte por una métrica
+(goles, asistencias, contribuciones de gol, penaltis, tarjetas, tiros, puntos, etc.):
+
+incluye SIEMPRE esa métrica en el SELECT aunque el usuario no pida explícitamente mostrarla.
+
+Ejemplos:
+
+- "jugadores con más goles"
+→ incluye goals
+
+- "equipos con más tiros"
+→ incluye shots
+
+- "porteros con alguna contribución de gol"
+→ incluye goal_contributions
+
+- "jugadores con penaltis marcados"
+→ incluye penalties_scored
+
+No devuelvas solo nombre/temporada/competición si existe una métrica principal relacionada con la pregunta.
+
+La columna principal debe aparecer en el SELECT.
+
+Cuando el usuario diga:
+
+- "alguna contribución de gol"
+- "con goles"
+- "con asistencias"
+- "con penaltis"
+
+además del filtro correspondiente (> 0),
+incluye esa columna en SELECT.
+
+Ejemplo:
+
+WHERE goal_contributions > 0
+
+y también:
+
+SELECT name, season, competition, goal_contributions
+
 REGLAS SEMÁNTICAS:
 
 - “liga española” -> La Liga
@@ -120,6 +165,17 @@ NO uses comillas para temporadas.
 
 Ejemplo correcto:
 season IN (2122, 2223)
+
+Cuando el usuario diga:
+
+- "en todas las temporadas"
+- "cada temporada"
+- "temporadas disponibles"
+
+debe interpretarse SOLO por season.
+
+NO combinar season con competition
+salvo que el usuario lo pida explícitamente.
 
 REGLAS SOBRE POSICIONES:
 
@@ -316,23 +372,23 @@ def get_tables():
     df = pd.read_sql(query, engine)
     return df["table_name"].tolist()
 
-@app.get("/table/{table_name}")
-def get_table(table_name: str, limit: int = 100, offset: int = 0):
-    allowed_tables = ["players", "player_stats"]
+# @app.get("/table/{table_name}")
+# def get_table(table_name: str, limit: int = 100, offset: int = 0):
+#     allowed_tables = ["players", "player_stats"]
 
-    if table_name not in allowed_tables:
-        return {"error": "Tabla no permitida"}
+#     if table_name not in allowed_tables:
+#         return {"error": "Tabla no permitida"}
 
-    limit = min(limit, 200)  # 🔥 evitar locuras
+#     limit = min(limit, 200)  # evitar locuras
 
-    query = f"""
-    SELECT * FROM {table_name}
-    ORDER BY id
-    LIMIT {limit} OFFSET {offset}
-    """
+#     query = f"""
+#     SELECT * FROM {table_name}
+#     ORDER BY id
+#     LIMIT {limit} OFFSET {offset}
+#     """
     
-    df = pd.read_sql(query, engine)
-    return df.to_dict(orient="records")
+#     df = pd.read_sql(query, engine)
+#     return df.to_dict(orient="records")
 
 @app.get("/search")
 def search(q: str, competition: str = None):
@@ -500,9 +556,8 @@ def ask(question: str):
         print(sql)
 
         if not validate_sql(sql):
-            return {
-                "error": "SQL inválido"
-            }
+            print("SQL inválido:", sql)
+            return {"error": "SQL inválido"}
 
         if "LIMIT" not in sql.upper():
             sql += " LIMIT 100"
