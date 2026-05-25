@@ -39,21 +39,22 @@ player_stats:
 - competition
 - goals
 - assists
-- Playing Time_MP (partidos jugados)
-- Playing Time_Starts (titularidades)
-- Playing Time_Min
-- Playing Time_90s (partidos completos equivalentes)
-- Performance_G+A (contribuciones de gol)
-- Performance_G-PK (contribuciones de gol sin penalti)
-- Performance_PK (penaltis marcados)
-- Performance_PKatt (penaltis intentados)
-- Performance_CrdY
-- Performance_CrdR
-- Per 90 Minutes_Gls
-- Per 90 Minutes_Ast
-- Per 90 Minutes_G+A (contribuciones de gol por 90 mins)
-- Per 90 Minutes_G-PK (goles por 90 mins sin penaltis)
-- Per 90 Minutes_G+A-PK (contribuciones de gol sin penaltis por 90 mins)
+- matches_played (partidos jugados)
+- starts (titularidades)
+- minutes 
+- matches_90s (partidos completos equivalentes)
+- goal_contributions (contribuciones de gol, G+A)
+- non_penalty_goal_contributions (contribuciones de gol sin penalti, G+A-Pk)
+- non_penalty_goals (goles sin penalti, G-Pk)
+- penalties_scored (penaltis marcados)
+- penalties_attempted (penaltis intentados)
+- yellow_cards
+- red_cards
+- per90_goals
+- per90_assists
+- per90_goal_contributions (contribuciones de gol por 90 mins)
+- per90_non_penalty_goals (goles por 90 mins sin penaltis)
+- per90_non_penalty_goal_contributions (contribuciones de gol sin penaltis por 90 mins)
 
 
 team_stats (estadísticas colectivas de equipos por temporada):
@@ -68,15 +69,15 @@ team_stats (estadísticas colectivas de equipos por temporada):
 - shots (tiros totales)
 - shots_on_target (tiros a puerta)
 
-- Standard_SoT% (precisión de tiro)
-- Standard_Sh/90 (tiros por partido)
-- Standard_SoT/90 (tiros a puerta por partido)
+- shot_accuracy (precisión de tiro)
+- shots_per90 (tiros por partido)
+- shots_on_target_per90 (tiros a puerta por partido)
 
-- Standard_G/Sh (conversión de tiros en gol)
-- Standard_G/SoT (conversión de tiros a puerta en gol)
+- goals_per_shot (goles por tiro realizado)
+- goals_per_shot_on_target (goles por tiro a puerta realizado)
 
-- Standard_PK (penaltis marcados)
-- Standard_PKatt (penaltis intentados)
+- penalties_scored (penaltis marcados)
+- penalties_attempted (penaltis intentados)
 
 standings:
 - team_name
@@ -111,8 +112,36 @@ FORMATO EXACTO:
 
 Cuando uses IN sobre columnas TEXT, los valores deben ir entre comillas simples.
 
-Ejemplo:
-season IN ('2122', '2223')
+Ejemplo correcto:
+competition IN ('La Liga', 'Premier League')
+
+Las temporadas son BIGINT.
+NO uses comillas para temporadas.
+
+Ejemplo correcto:
+season IN (2122, 2223)
+
+REGLAS SOBRE POSICIONES:
+
+La columna "pos" puede contener múltiples posiciones.
+
+Ejemplos:
+- FW
+- FW,MF
+- MF,FW
+- DF,MF
+
+Por tanto:
+
+- delanteros -> pos LIKE '%FW%'
+- mediocampistas -> pos LIKE '%MF%'
+- defensas -> pos LIKE '%DF%'
+- porteros -> pos LIKE '%GK%'
+
+NO uses:
+pos = 'FW'
+
+excepto si el usuario pide exclusivamente delanteros puros.
 
 - Cuando el usuario pregunte:
   "equipos con más..."
@@ -140,11 +169,6 @@ ESPAÑA = ESP, ARGENTINA = ARG
 - Usa SIEMPRE nombres exactos de columnas.
 - NO inventes columnas.
 - NO inventes tablas.
-- PostgreSQL requiere comillas dobles para columnas con espacios.
-- Ejemplo:
-  "Playing Time_MP"
-
-- Si una columna tiene espacios o símbolos, usa comillas dobles.
 
 - IDIOMA DE ALIAS: Cuando el usuario solicite métricas agregadas o calculadas (usando SUM, AVG, COUNT, etc.), debes crear SIEMPRE el alias de la columna (usando 'AS') en ESPAÑOL utilizando snake_case. 
 - Está terminantemente prohibido usar palabras en inglés para los alias creados (por ejemplo, usa 'total_penaltis_intentados' en lugar de 'total_penalties_attempted').
@@ -236,15 +260,33 @@ def get_player(name: str):
         MAX(ps.competition) AS competition,
         MAX(ps.born) AS born,
 
+        -- Stats principales
         SUM(ps.goals) AS goals,
         SUM(ps.assists) AS assists,
+        SUM(ps.goal_contributions) AS goal_contributions,
+        SUM(ps.non_penalty_goals) AS non_penalty_goals,
+        SUM(ps.non_penalty_goal_contributions) AS non_penalty_goal_contributions,
 
-        SUM(ps."Playing Time_MP") AS "Playing Time_MP",
-        SUM(ps."Playing Time_Min") AS "Playing Time_Min",
+        -- Penaltis
+        SUM(ps.penalties_scored) AS penalties_scored,
+        SUM(ps.penalties_attempted) AS penalties_attempted,
 
-        SUM(ps."Performance_G+A") AS "Performance_G+A",
-        SUM(ps."Performance_CrdY") AS "Performance_CrdY",
-        SUM(ps."Performance_CrdR") AS "Performance_CrdR"
+        -- Disciplina
+        SUM(ps.yellow_cards) AS yellow_cards,
+        SUM(ps.red_cards) AS red_cards,
+
+        -- Tiempo de juego
+        SUM(ps.matches_played) AS matches_played,
+        SUM(ps.starts) AS starts,
+        SUM(ps.minutes) AS minutes,
+        SUM(ps.matches_90s) AS matches_90s,
+
+        -- Stats por 90
+        AVG(ps.per90_goals) AS per90_goals,
+        AVG(ps.per90_assists) AS per90_assists,
+        AVG(ps.per90_goal_contributions) AS per90_goal_contributions,
+        AVG(ps.per90_non_penalty_goals) AS per90_non_penalty_goals,
+        AVG(ps.per90_non_penalty_goal_contributions) AS per90_non_penalty_goal_contributions
 
     FROM player_stats ps
 
@@ -258,7 +300,9 @@ def get_player(name: str):
     ORDER BY ps.season DESC
     """)
 
-    df = pd.read_sql(query, engine, params={"name": name})
+    df = pd.read_sql(query, engine, params={
+        "name": name
+    })
 
     return df.fillna("").to_dict(orient="records")
 

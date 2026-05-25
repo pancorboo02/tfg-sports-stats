@@ -26,12 +26,12 @@ function Team() {
 
         if (data.length > 0) {
           setSeason(data[0].season);
-          setCompetition(data[0].competition); // 🔥 IMPORTANTE: usar competition
+          setCompetition(data[0].competition);
         }
       });
   }, [name]);
 
-  // 🔥 cargar standings
+  //  cargar standings
   useEffect(() => {
     if (!competition || !season) return;
 
@@ -47,25 +47,25 @@ function Team() {
 
   if (data.length === 0) return <div>Cargando...</div>;
 
-  // 🔥 obtener competiciones únicas
+  // obtener competiciones únicas
   const competitions = [...new Set(data.map((d) => d.competition))];
 
-  // 🔥 temporadas filtradas por competición
+  // temporadas filtradas por competición
   const seasons = [
     ...new Set(
       data.filter((d) => d.competition === competition).map((d) => d.season)
     ),
   ];
 
-  // 🔥 datos filtrados por competición
+  // datos filtrados por competición
   const filteredData = data.filter((d) => d.competition === competition);
 
-  // 🔥 temporada actual
+  // temporada actual
   const current = filteredData.find((d) => Number(d.season) === Number(season));
 
   if (!current) return <div>No hay datos para esta competición</div>;
 
-  // 🔥 standings del equipo
+  // standings del equipo
   const teamStanding = standings.find((t) => t.team_name === name);
 
   return (
@@ -138,7 +138,7 @@ function Team() {
 
         <div className="stat-card">
           <span>🎯</span>
-          <h3>{current?.['Standard_Sh/90'] || 0}</h3>
+          <h3>{current?.shots_per90 || 0}</h3>
           <p>Tiros /90</p>
         </div>
       </div>

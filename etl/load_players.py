@@ -55,9 +55,33 @@ df = df.rename(columns={
     "player": "name",
     "nation": "nationality",
     "team": "team_name",
+
     "Performance_Gls": "goals",
-    "Performance_Ast": "assists"
+    "Performance_Ast": "assists",
+
+    "Playing Time_MP": "matches_played",
+    "Playing Time_Starts": "starts",
+    "Playing Time_Min": "minutes",
+    "Playing Time_90s": "matches_90s",
+
+    "Performance_G+A": "goal_contributions",
+    "Performance_G-PK": "non_penalty_goals",
+    "Performance_PK": "penalties_scored",
+    "Performance_PKatt": "penalties_attempted",
+
+    "Performance_CrdY": "yellow_cards",
+    "Performance_CrdR": "red_cards",
+
+    "Per 90 Minutes_Gls": "per90_goals",
+    "Per 90 Minutes_Ast": "per90_assists",
+    "Per 90 Minutes_G+A": "per90_goal_contributions",
+    "Per 90 Minutes_G-PK": "per90_non_penalty_goals",
+    "Per 90 Minutes_G+A-PK": "per90_non_penalty_goal_contributions"
 })
+
+df["non_penalty_goal_contributions"] = (
+    df["non_penalty_goals"] + df["assists"]
+)
 
 # 🔥 eliminar columnas innecesarias si quieres optimizar
 # df = df[["name", "team_name", "competition", "season", "goals", "assists", ...]]

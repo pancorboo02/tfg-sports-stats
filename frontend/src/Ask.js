@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import playerPlaceholder from './assets/player-placeholder.png';
 import { useNavigate } from 'react-router-dom';
-import { queryColumnsMap, formatColumnName } from './utils/queryColumnsMap';
+import { formatColumnName } from './utils/queryColumnsMap';
 
 function Ask() {
   const [searchParams] = useSearchParams();
