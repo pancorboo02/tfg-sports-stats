@@ -1,10 +1,31 @@
 import requests
 import pandas as pd
 from sqlalchemy import create_engine, text
+import os
 
+import soccerdata as sd
+import pandas as pd
+
+from pathlib import Path
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
 API_KEY = "1c17684803df420a8276c2de73e427fd"
 
-engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+ENV_PATH = BASE_DIR / "backend" / ".env"
+
+load_dotenv(ENV_PATH)
+
+DATABASE_URL = (
+    f"postgresql://{os.getenv('DATABASE_USER')}:"
+    f"{os.getenv('DATABASE_PASSWORD')}@"
+    f"{os.getenv('DATABASE_HOST')}:"
+    f"{os.getenv('DATABASE_PORT')}/"
+    f"{os.getenv('DATABASE_NAME')}"
+)
+
+engine = create_engine(DATABASE_URL)
 
 headers = {
     "X-Auth-Token": API_KEY
@@ -100,4 +121,4 @@ for code in competitions.keys():
 
         print(f"✔ {db_name}")
 
-print("✅ Logos cargados")
+print("Logos cargados")

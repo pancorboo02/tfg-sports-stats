@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import StatsChart from './components/StatsChart';
 import { formatSeason } from './utils/formatSeason';
 import Standings from './components/Standings';
@@ -8,7 +8,6 @@ import { teamStatsInfo } from './utils/teamStatsInfo';
 
 function Team() {
   const { name } = useParams();
-  const navigate = useNavigate();
 
   const [data, setData] = useState([]);
   const [season, setSeason] = useState(null);
@@ -16,7 +15,7 @@ function Team() {
   const [selectedStat, setSelectedStat] = useState('goals');
   const [standings, setStandings] = useState([]);
 
-  // 🔥 cargar datos del equipo
+  // cargar datos del equipo
   useEffect(() => {
     window.scrollTo(0, 0);
     fetch(`http://127.0.0.1:8000/team/${name}`)
@@ -80,7 +79,7 @@ function Team() {
         <h1>{name}</h1>
       </div>
 
-      {/* 🔥 FILTRO COMPETICIÓN */}
+      {/* FILTRO COMPETICIÓN */}
       <select
         value={competition || ''}
         onChange={(e) => {
@@ -95,7 +94,7 @@ function Team() {
         ))}
       </select>
 
-      {/* 🔥 FILTRO TEMPORADA */}
+      {/* FILTRO TEMPORADA */}
       <select value={season || ''} onChange={(e) => setSeason(e.target.value)}>
         {seasons.map((s, i) => (
           <option key={i} value={s}>
@@ -104,7 +103,7 @@ function Team() {
         ))}
       </select>
 
-      {/* 🔥 STATS PRINCIPALES */}
+      {/* STATS PRINCIPALES */}
       <div className="stats-grid">
         <div className="stat-card">
           <span>🏆</span>
@@ -143,7 +142,7 @@ function Team() {
         </div>
       </div>
 
-      {/* 🔥 SELECTOR STAT */}
+      {/* SELECTOR STAT */}
       <select
         value={selectedStat}
         onChange={(e) => setSelectedStat(e.target.value)}
@@ -155,15 +154,15 @@ function Team() {
         ))}
       </select>
 
-      {/* 🔥 INFO STAT */}
+      {/* INFO STAT */}
       <div style={{ marginTop: '8px', fontSize: '13px', color: '#aaa' }}>
         {teamStatsInfo[selectedStat]}
       </div>
 
-      {/* 📊 GRÁFICO */}
+      {/* GRÁFICO */}
       <StatsChart data={filteredData} stat={selectedStat} />
 
-      {/* 🏆 CLASIFICACIÓN */}
+      {/* CLASIFICACIÓN */}
       {standings.length > 0 ? (
         <Standings competition={competition} season={season} teamName={name} />
       ) : (

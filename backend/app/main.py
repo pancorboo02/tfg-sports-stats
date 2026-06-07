@@ -2,17 +2,34 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
+
 import pandas as pd
 from google import genai
+
 import re
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+client = genai.Client(
+    api_key=GEMINI_API_KEY
+)
+
+DATABASE_URL = (
+    f"postgresql://{os.getenv('DATABASE_USER')}:"
+    f"{os.getenv('DATABASE_PASSWORD')}@"
+    f"{os.getenv('DATABASE_HOST')}:"
+    f"{os.getenv('DATABASE_PORT')}/"
+    f"{os.getenv('DATABASE_NAME')}"
+)
+
+engine = create_engine(DATABASE_URL)
+
+app = FastAPI()
 
 SYSTEM_PROMPT = """
 Eres un experto en PostgreSQL.
@@ -287,7 +304,6 @@ def generate_sql(question: str):
 
 app = FastAPI()
 
-engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
 
 # CORS ARREGLADO :D
 app.add_middleware(
