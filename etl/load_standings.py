@@ -1,8 +1,27 @@
+import os
+
 import soccerdata as sd
 import pandas as pd
+
+from pathlib import Path
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 
-engine = create_engine("postgresql://tfg:1234@localhost:5432/tfg_db")
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+ENV_PATH = BASE_DIR / "backend" / ".env"
+
+load_dotenv(ENV_PATH)
+
+DATABASE_URL = (
+    f"postgresql://{os.getenv('DATABASE_USER')}:"
+    f"{os.getenv('DATABASE_PASSWORD')}@"
+    f"{os.getenv('DATABASE_HOST')}:"
+    f"{os.getenv('DATABASE_PORT')}/"
+    f"{os.getenv('DATABASE_NAME')}"
+)
+
+engine = create_engine(DATABASE_URL)
 
 leagues = [
     'ENG-Premier League',
