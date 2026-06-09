@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { getQueryHistory } from './utils/queryHistory';
 import { useEffect, useState } from 'react';
+import mayordomo from './assets/mayordomo.png';
 import './App.css';
 
 function Home() {
@@ -25,7 +26,7 @@ function Home() {
   };
 
   const clearHistory = async () => {
-    await fetch('http://127.0.0.1:8000/query-history', {
+    await fetch('http://127.0.0.1:8005/query-history', {
       method: 'DELETE',
     });
 
@@ -34,7 +35,14 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h1 className="home-title">Pregunta al agente SebastIAn</h1>
+      <div className="assistant-header">
+        <h1 className="home-title">Pregunta al agente SebastIAn</h1>
+        <img
+          src={mayordomo}
+          alt="Agente SebastIAn"
+          className="mayordomo-image"
+        />
+      </div>
 
       <p className="home-subtitle">
         Consulta estadísticas de fútbol usando lenguaje natural

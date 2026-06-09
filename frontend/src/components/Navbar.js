@@ -18,8 +18,8 @@ function Navbar() {
       }
 
       const url = competition
-        ? `http://127.0.0.1:8000/search?q=${query}&competition=${competition}`
-        : `http://127.0.0.1:8000/search?q=${query}`;
+        ? `http://127.0.0.1:8003/search?q=${query}&competition=${competition}`
+        : `http://127.0.0.1:8003/search?q=${query}`;
 
       fetch(url)
         .then((res) => res.json())

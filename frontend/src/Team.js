@@ -18,7 +18,7 @@ function Team() {
   // cargar datos del equipo
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetch(`http://127.0.0.1:8000/team/${name}`)
+    fetch(`http://127.0.0.1:8002/team/${name}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);
@@ -35,7 +35,7 @@ function Team() {
     if (!competition || !season) return;
 
     fetch(
-      `http://127.0.0.1:8000/standings?competition=${encodeURIComponent(
+      `http://127.0.0.1:8004/standings?competition=${encodeURIComponent(
         competition
       )}&season=${season}`
     )

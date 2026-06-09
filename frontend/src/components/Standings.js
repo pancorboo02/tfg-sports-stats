@@ -14,7 +14,7 @@ function Standings({ competition, season, teamName }) {
     setLoading(true);
 
     fetch(
-      `http://127.0.0.1:8000/standings?competition=${competition}&season=${season}`
+      `http://127.0.0.1:8004/standings?competition=${competition}&season=${season}`
     )
       .then((res) => res.json())
       .then((data) => {

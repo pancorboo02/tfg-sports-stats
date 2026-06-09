@@ -8,19 +8,72 @@ services:
     ports:
       - "3000:3000"
 
-    depends_on:
-      - backend
-
-  backend:
+  player-service:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
-
-    ports:
-      - "8000:8000"
+      context: ./backend
+      dockerfile: ./app/player-service/Dockerfile
 
     env_file:
       - ./backend/.env
+
+    ports:
+      - "8001:8000"
+
+    depends_on:
+      - db
+
+  team-service:
+    build:
+      context: ./backend
+      dockerfile: ./app/team-service/Dockerfile
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8002:8000"
+
+    depends_on:
+      - db
+
+  search-service:
+    build:
+      context: ./backend
+      dockerfile: ./app/search-service/Dockerfile
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8003:8000"
+
+    depends_on:
+      - db
+
+  standings-service:
+    build:
+      context: ./backend
+      dockerfile: ./app/standings-service/Dockerfile
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8004:8000"
+
+    depends_on:
+      - db
+
+  ai-query-service:
+    build:
+      context: ./backend
+      dockerfile: ./app/ai-query-service/Dockerfile
+
+    env_file:
+      - ./backend/.env
+
+    ports:
+      - "8005:8000"
 
     depends_on:
       - db
