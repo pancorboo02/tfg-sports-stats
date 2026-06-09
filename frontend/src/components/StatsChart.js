@@ -21,7 +21,7 @@ function StatsChart({ data, stat }) {
       value: d[stat] || 0,
     }));
 
-  // 🔥 TOOLTIP PERSONALIZADO
+  // TOOLTIP PERSONALIZADO
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -89,7 +89,6 @@ function StatsChart({ data, stat }) {
 
           <YAxis tick={{ fill: '#ccc' }} />
 
-          {/* 🔥 AQUÍ ESTABA EL FALLO: ahora sí usamos CustomTooltip */}
           <Tooltip content={<CustomTooltip />} />
 
           <Bar

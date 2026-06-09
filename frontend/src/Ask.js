@@ -14,7 +14,7 @@ function Ask() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/ask?question=${encodeURIComponent(question)}`)
+    fetch(`http://127.0.0.1:8005/ask?question=${encodeURIComponent(question)}`)
       .then((res) => res.json())
       .then((result) => {
         setData(result);
@@ -30,9 +30,9 @@ function Ask() {
     <div style={{ padding: '20px' }}>
       <h1>{question}</h1>
 
-      <h3>SQL generado</h3>
+      {/* <h3>SQL generado</h3>
 
-      <pre>{data?.sql}</pre>
+      <pre>{data?.sql}</pre> */}
 
       {data?.error ? (
         <div>

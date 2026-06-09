@@ -19,7 +19,7 @@ function Player() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetch(`http://127.0.0.1:8000/player/${name}`)
+    fetch(`http://127.0.0.1:8001/player/${name}`)
       .then((res) => res.json())
       .then((data) => {
         setData(data);

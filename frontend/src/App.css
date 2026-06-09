@@ -495,3 +495,15 @@ select {
 .clear-history-btn:hover {
   background: #3a3a3a;
 }
+
+.assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.mayordomo-image {
+  width: 70px;
+  height: 70px;
+}
