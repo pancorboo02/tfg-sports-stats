@@ -117,8 +117,7 @@ function Navbar() {
           </ul>
         )}
       </div>
-
-      <div style={{ width: '120px' }} />
+      <div className="navbar-spacer" />
     </div>
   );
 }
