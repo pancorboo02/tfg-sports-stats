@@ -1,4 +1,3 @@
-// Nacionalidades solo de la premier, habrá que añadir si añado más ligas (probablemnte)
 export const countryMap = {
   ALB: 'Albania 🇦🇱',
   ALG: 'Argelia 🇩🇿',

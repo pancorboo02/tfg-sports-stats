@@ -57,5 +57,5 @@ def generate_sql(question: str):
             print(f"El modelo {model_name} falló o está saturado: {str(e)}")
             continue # Si falla, salta al siguiente modelo de la lista
             
-    # Si todos fallan (cosa rarísima)
+    # Si todos fallan (no debería ocurrir pero quien sabe)
     raise Exception("Todos los modelos de IA de Google están saturados en este momento.")

@@ -46,7 +46,6 @@ function StatsChart({ data, stat }) {
   const renderCustomLabel = (props) => {
     const { x, y, width, height, value } = props;
 
-    // Si la barra es muy pequeña, lo dejamos arriba (afuera)
     if (height < 30) {
       return (
         <text
@@ -65,12 +64,11 @@ function StatsChart({ data, stat }) {
     return (
       <text
         x={x + width / 2}
-        // Cambia el 15 por 25 o 30 para bajarlo más
         y={y + 25}
         textAnchor="middle"
         fill="white"
         fontWeight="bold"
-        fontSize={20} // Un tamaño de 20-24 suele quedar bien
+        fontSize={20}
       >
         {value}
       </text>

@@ -87,7 +87,7 @@ function Player() {
         ))}
       </select>
 
-      {/* SELECTOR STAT (CORREGIDO) */}
+      {/* SELECTOR STAT (arrelgado) */}
       <select
         value={selectedStat}
         onChange={(e) => setSelectedStat(e.target.value)}
