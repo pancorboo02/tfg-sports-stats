@@ -160,7 +160,11 @@ function Team() {
       </div>
 
       {/* GRÁFICO */}
-      <StatsChart data={filteredData} stat={selectedStat} />
+      <StatsChart
+        data={filteredData}
+        stat={selectedStat}
+        labelsMap={teamStatsMap}
+      />
 
       {/* CLASIFICACIÓN */}
       {standings.length > 0 ? (

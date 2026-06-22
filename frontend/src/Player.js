@@ -139,7 +139,7 @@ function Player() {
       </div>
 
       {/* GRÁFICO */}
-      <StatsChart data={data} stat={selectedStat} />
+      <StatsChart data={data} stat={selectedStat} labelsMap={statsMap} />
     </div>
   );
 }
