@@ -11,7 +11,7 @@ import {
 import { statsMap } from '../utils/statsMap';
 import { formatSeason } from '../utils/formatSeason';
 import { LabelList } from 'recharts';
-import { teamStatsMap } from '../utils/teamStatsMap';
+// import { teamStatsMap } from '../utils/teamStatsMap';
 
 function StatsChart({ data, stat, labelsMap }) {
   const formattedData = [...data]
